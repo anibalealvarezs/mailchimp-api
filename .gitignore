@@ -1,0 +1,5 @@
+/vendor/
+/.idea/
+/config/config.yaml
+/api-skeleton/
+/.phpunit.result.cache

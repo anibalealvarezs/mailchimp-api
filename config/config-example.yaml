@@ -1,0 +1,4 @@
+mailchimp_marketing_api_key: # api_key
+mailchimp_marketing_server_prefix: # us5
+mailchimp_marketing_list_for_tests: # List Name or ID
+mailchimp_transactional_api_key: # api_key

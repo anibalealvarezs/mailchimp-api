@@ -1,0 +1,40 @@
+{
+    "name": "anibalealvarezs/mailchimp-api",
+    "description": "description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aníbal Álvarez",
+            "email": "anibalealvarezs@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "guzzlehttp/guzzle": "^7.0",
+        "ext-json": "*",
+        "symfony/yaml": "^5.4.10",
+        "nesbot/carbon": "^2.61",
+        "anibalealvarezs/api-client-skeleton": "@dev"
+    },
+    "repositories": [
+        {
+            "type": "composer", "url": "https://satis.anibalalvarez.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Anibalealvarezs\\MailchimpApi\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.20",
+        "phpunit/phpunit": "^9"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": false
+}
