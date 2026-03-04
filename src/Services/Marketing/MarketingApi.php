@@ -19,20 +19,24 @@ class MarketingApi extends BasicClient
         string $apiKey,
         string $serverPrefix,
     ) {
-        return parent::__construct(
+        parent::__construct(
             baseUrl: 'https://'.$serverPrefix.'.api.mailchimp.com/3.0/',
             username: 'whatever',
             password: $apiKey,
             encodingMethod: EncodingMethod::base64,
             delayHeader: "X-Rate-Limit-Reset",
         );
+
+        $this->setResponseErrorDetector('detail');
+        $this->setErrorMessageParser(fn ($data) => $data['detail'] ?? ($data['title'] ?? json_encode($data)));
     }
 
     /**
      * @return array
      * @throws GuzzleException
      */
-    public function ping(): array {
+    public function ping(): array
+    {
         $response = $this->performRequest(
             method: "GET",
             endpoint: "ping",
@@ -59,7 +63,7 @@ class MarketingApi extends BasicClient
         string $sortField = "date_created", // Currently just "date_created" is supported
         string $sortDir = "DESC",
     ): array {
-        $query =[
+        $query = [
             "count" => $count,
             "offset" => $offset,
             "has_ecommerce_store" => $hasEcommerceStore,
@@ -156,7 +160,7 @@ class MarketingApi extends BasicClient
         }
         if ($listId === null) {
             $lists = $this->getAllListsInfo();
-            $list = array_filter($lists['lists'], function($list) use ($listName) {
+            $list = array_filter($lists['lists'], function ($list) use ($listName) {
                 return $list['name'] === $listName;
             });
             if (count($list) === 0) {
@@ -164,7 +168,7 @@ class MarketingApi extends BasicClient
             }
             $listId = $list[0]['id'];
         }
-        $query =[
+        $query = [
             "count" => $count,
             "offset" => $offset,
             "sort_field" => $sortField,

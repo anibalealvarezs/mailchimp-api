@@ -3,3 +3,5 @@
 /config/config.yaml
 /api-skeleton/
 /.phpunit.result.cache
+/phpstan.neon
+/.vscode/

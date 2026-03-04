@@ -14,20 +14,24 @@ class TransactionalApi extends NoAuthClient
     public function __construct(
         string $apiKey,
     ) {
-        return parent::__construct(
+        parent::__construct(
             baseUrl: 'https://mandrillapp.com/api/1.0/',
             defaultHeaders: [
                 'Content-Type' => 'application/json',
                 'key' => $apiKey,
             ],
         );
+
+        $this->setResponseErrorDetector('message');
+        $this->setErrorMessageParser(fn ($data) => $data['message'] ?? json_encode($data));
     }
 
     /**
      * @return array
      * @throws GuzzleException
      */
-    public function ping(): array {
+    public function ping(): array
+    {
         $response = $this->performRequest(
             method: "POST",
             endpoint: "users/ping",
