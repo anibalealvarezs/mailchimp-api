@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        extensions: mbstring, json, dom, curl, libxml, pdo_mysql, pdo_pgsql, redis
+        coverage: none
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --ignore-platform-req=ext-imap
+
+    - name: Run PHPUnit
+      run: |
+        if [ -f vendor/bin/phpunit ]; then
+          vendor/bin/phpunit
+        fi
+
+    - name: Run PHPStan
+      run: |
+        if [ -f vendor/bin/phpstan ]; then
+          vendor/bin/phpstan analyse
+        fi
