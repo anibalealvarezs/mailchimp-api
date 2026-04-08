@@ -12,15 +12,16 @@
             "dist": {
                 "type": "path",
                 "url": "../api-client-skeleton",
-                "reference": "5c122ef04bff64fb764eadb33b738d13574f4394"
+                "reference": "72c9b2f8f6513993f04eb8fdfa30ebf9a227fac2"
             },
             "require": {
                 "anibalealvarezs/oauth-v1": "@dev",
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^7.0",
-                "nesbot/carbon": "^2.61",
+                "nesbot/carbon": "^2.61 || ^3.0",
                 "php": ">=8.1",
-                "symfony/yaml": "^5.4.10"
+                "symfony/http-foundation": "^5.4 || ^6.0 || ^7.0",
+                "symfony/yaml": "^5.4.10 || ^6.0 || ^7.0"
             },
             "require-dev": {
                 "fakerphp/faker": "^1.20",
@@ -47,7 +48,19 @@
                     "email": "anibalealvarezs@gmail.com"
                 }
             ],
-            "description": "description",
+            "description": "Base skeleton for standardizing PHP API clients with advanced error handling and data normalization.",
+            "homepage": "https://github.com/anibalealvarezs/api-client-skeleton",
+            "keywords": [
+                "api",
+                "client",
+                "error-handling",
+                "normalization",
+                "sdk",
+                "skeleton"
+            ],
+            "support": {
+                "issues": "https://github.com/anibalealvarezs/api-client-skeleton/issues"
+            },
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -59,7 +72,7 @@
             "dist": {
                 "type": "path",
                 "url": "../OAuth-v1",
-                "reference": "c47bb38647f4e331c33ff1fc1a0968d6aec00350"
+                "reference": "2f6fab9faed2c24db376b937ab599bc42a1929eb"
             },
             "require": {
                 "php": ">=8.1"
@@ -89,7 +102,19 @@
                     "email": "anibalealvarezs@gmail.com"
                 }
             ],
-            "description": "description",
+            "description": "A lightweight PHP library for handling OAuth 1.0a authentication and request signing.",
+            "homepage": "https://github.com/anibalealvarezs/OAuth-v1",
+            "keywords": [
+                "api",
+                "authentication",
+                "guzzle-middleware",
+                "oauth",
+                "oauth1",
+                "signing"
+            ],
+            "support": {
+                "issues": "https://github.com/anibalealvarezs/OAuth-v1/issues"
+            },
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -925,6 +950,88 @@
                 }
             ],
             "time": "2026-01-05T13:30:16+00:00"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "7.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-foundation.git",
+                "reference": "85c143d0b60d5bb63388ad68fd212a9cb757266b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/85c143d0b60d5bb63388ad68fd212a9cb757266b",
+                "reference": "85c143d0b60d5bb63388ad68fd212a9cb757266b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/polyfill-mbstring": "^1.1"
+            },
+            "conflict": {
+                "doctrine/dbal": "<3.6",
+                "symfony/cache": "<6.4.12|>=7.0,<7.1.5"
+            },
+            "require-dev": {
+                "doctrine/dbal": "^3.6|^4",
+                "predis/predis": "^1.1|^2.0",
+                "symfony/cache": "^6.4.12|^7.1.5|^8.0",
+                "symfony/clock": "^6.4|^7.0|^8.0",
+                "symfony/dependency-injection": "^6.4|^7.0|^8.0",
+                "symfony/expression-language": "^6.4|^7.0|^8.0",
+                "symfony/http-kernel": "^6.4|^7.0|^8.0",
+                "symfony/mime": "^6.4|^7.0|^8.0",
+                "symfony/rate-limiter": "^6.4|^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HttpFoundation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Defines an object-oriented layer for the HTTP specification",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/http-foundation/tree/7.4"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-04-06T11:04:10+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
