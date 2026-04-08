@@ -259,4 +259,94 @@ class MarketingApi extends BasicClient
             'members' => $members
         ];
     }
+
+    /**
+     * @param bool $hasEcommerceStore
+     * @param bool $includeTotalContacts
+     * @param string $sortField
+     * @param string $sortDir
+     * @param callable $callback
+     * @return void
+     * @throws GuzzleException
+     */
+    public function getAllListsInfoAndProcess(
+        callable $callback,
+        bool $hasEcommerceStore = false,
+        bool $includeTotalContacts = true,
+        string $sortField = "date_created",
+        string $sortDir = "DESC",
+    ): void {
+        $count = 1000;
+        $offset = 0;
+
+        do {
+            $response = $this->getListsInfo(
+                count: $count,
+                offset: $offset,
+                hasEcommerceStore: $hasEcommerceStore,
+                includeTotalContacts: $includeTotalContacts,
+                sortField: $sortField,
+                sortDir: $sortDir
+            );
+            if (!empty($response['lists'])) {
+                $callback($response['lists']);
+            }
+            $offset += $count;
+        } while ($response['total_items'] > $offset);
+    }
+
+    /**
+     * @param callable $callback
+     * @param string|null $listId
+     * @param string|null $listName
+     * @param array $fields
+     * @param string|null $status
+     * @param string $sortField
+     * @param string $sortDir
+     * @param bool $vip_only
+     * @param string|null $unsubscribedSince
+     * @return void
+     * @throws GuzzleException
+     * @throws Exception
+     */
+    public function getAllListMembersInfoAndProcess(
+        callable $callback,
+        ?string $listId = null,
+        ?string $listName = null,
+        array $fields = [
+            'members.id','members.email_address','members.unique_email_id','members.contact_id','members.full_name',
+            'members.web_id', 'members.status', 'members.consents_to_one_to_one_messaging', 'members.sms_phone_number',
+            'members.sms_subscription_status', 'members.stats','members.timestamp_signup','members.timestamp_opt','members.vip',
+            'members.location'.'country_code','members.location.timezone','members.location.region','members.tags_count',
+            'members.tags','list_id','total_items',
+        ],
+        ?string $status = "subscribed",
+        string $sortField = "timestamp_opt",
+        string $sortDir = "DESC",
+        bool $vip_only = false,
+        string $unsubscribedSince = null,
+    ): void {
+        $count = 1000;
+        $offset = 0;
+
+        do {
+            $response = $this->getListMembersInfo(
+                listId: $listId,
+                listName: $listName,
+                count: $count,
+                offset: $offset,
+                fields: $fields,
+                status: $status,
+                sortField: $sortField,
+                sortDir: $sortDir,
+                vip_only: $vip_only,
+                unsubscribedSince: $unsubscribedSince,
+            );
+            if (!empty($response['members'])) {
+                $callback($response['members']);
+            }
+            $totalItems = $response['total_items'] ?? $count + $offset; // Fallback if total_items is missing
+            $offset += $count;
+        } while ($totalItems > $offset);
+    }
 }
