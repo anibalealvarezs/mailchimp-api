@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "../api-client-skeleton",
-                "reference": "3dac0ba8d4555367ddc457aa0ff0362929f37fda"
+                "reference": "3fc90750e36016d1279c132f5e49b3f15a949a03"
             },
             "require": {
                 "anibalealvarezs/oauth-v1": "@dev",
