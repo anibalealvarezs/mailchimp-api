@@ -12,13 +12,13 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:anibalealvarezs/api-client-skeleton.git",
-                "reference": "642909c808c91df52508467cc25de29764507d47"
+                "reference": "17a041884f3cb41a2250ebbc0c07be23c8040b5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/api-client-skeleton/anibalealvarezs-api-client-skeleton-642909c808c91df52508467cc25de29764507d47-zip-f6dcdd.zip",
-                "reference": "642909c808c91df52508467cc25de29764507d47",
-                "shasum": "618ee1229f1df08ace6a67947e312d76030e2449"
+                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/api-client-skeleton/anibalealvarezs-api-client-skeleton-17a041884f3cb41a2250ebbc0c07be23c8040b5e-zip-d9f867.zip",
+                "reference": "17a041884f3cb41a2250ebbc0c07be23c8040b5e",
+                "shasum": "552a654dd9fc43d45133907c60e679e0a40f6eb4"
             },
             "require": {
                 "anibalealvarezs/oauth-v1": "@dev",
@@ -67,7 +67,7 @@
             "support": {
                 "issues": "https://github.com/anibalealvarezs/api-client-skeleton/issues"
             },
-            "time": "2026-04-10T20:27:13+00:00"
+            "time": "2026-04-11T22:17:53+00:00"
         },
         {
             "name": "anibalealvarezs/oauth-v1",
@@ -75,13 +75,13 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:anibalealvarezs/oauth-v1.git",
-                "reference": "2f6fab9faed2c24db376b937ab599bc42a1929eb"
+                "reference": "c986649e8bf0fbc1e05f5f2bb02e2d38269b3e2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/oauth-v1/anibalealvarezs-oauth-v1-2f6fab9faed2c24db376b937ab599bc42a1929eb-zip-da6b7a.zip",
-                "reference": "2f6fab9faed2c24db376b937ab599bc42a1929eb",
-                "shasum": "bbf61262c854b7d5dfe3ad6bbcc2952f1c0ffd59"
+                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/oauth-v1/anibalealvarezs-oauth-v1-c986649e8bf0fbc1e05f5f2bb02e2d38269b3e2a-zip-d1c052.zip",
+                "reference": "c986649e8bf0fbc1e05f5f2bb02e2d38269b3e2a",
+                "shasum": "47ff3415a730fb4eb1eabf03b0828e772ad25b58"
             },
             "require": {
                 "php": ">=8.1"
@@ -125,7 +125,7 @@
             "support": {
                 "issues": "https://github.com/anibalealvarezs/OAuth-v1/issues"
             },
-            "time": "2026-03-07T02:32:00+00:00"
+            "time": "2026-04-10T21:12:50+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
