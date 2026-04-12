@@ -13,11 +13,13 @@ class MarketingApi extends BasicClient
     /**
      * @param string $apiKey
      * @param string $serverPrefix
+     * @param \GuzzleHttp\Client|null $guzzleClient
      * @throws GuzzleException
      */
     public function __construct(
         string $apiKey,
         string $serverPrefix,
+        ?\GuzzleHttp\Client $guzzleClient = null,
     ) {
         parent::__construct(
             baseUrl: 'https://'.$serverPrefix.'.api.mailchimp.com/3.0/',
@@ -25,6 +27,7 @@ class MarketingApi extends BasicClient
             password: $apiKey,
             encodingMethod: EncodingMethod::base64,
             delayHeader: "X-Rate-Limit-Reset",
+            guzzleClient: $guzzleClient,
         );
 
         $this->setResponseErrorDetector('detail');
@@ -291,8 +294,9 @@ class MarketingApi extends BasicClient
             if (!empty($response['lists'])) {
                 $callback($response['lists']);
             }
+            $totalItems = $response['total_items'] ?? $count + $offset;
             $offset += $count;
-        } while ($response['total_items'] > $offset);
+        } while ($totalItems > $offset);
     }
 
     /**
@@ -346,6 +350,111 @@ class MarketingApi extends BasicClient
                 $callback($response['members']);
             }
             $totalItems = $response['total_items'] ?? $count + $offset; // Fallback if total_items is missing
+            $offset += $count;
+        } while ($totalItems > $offset);
+    }
+
+    /**
+     * @param int $count
+     * @param int $offset
+     * @param string|null $status
+     * @param string $sortField
+     * @param string $sortDir
+     * @return array
+     * @throws GuzzleException
+     */
+    public function getCampaigns(
+        int $count = 1000,
+        int $offset = 0,
+        ?string $status = null,
+        string $sortField = "create_time",
+        string $sortDir = "DESC",
+    ): array {
+        $query = [
+            "count" => $count,
+            "offset" => $offset,
+            "sort_field" => $sortField,
+            "sort_dir" => $sortDir,
+        ];
+        if ($status) {
+            $query['status'] = $status;
+        }
+        $response = $this->performRequest(
+            method: "GET",
+            endpoint: "campaigns",
+            query: $query,
+        );
+        // Return response
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
+     * @param string|null $status
+     * @param string $sortField
+     * @param string $sortDir
+     * @param int|null $loopLimit
+     * @return array
+     * @throws GuzzleException
+     */
+    public function getAllCampaigns(
+        ?string $status = null,
+        string $sortField = "create_time",
+        string $sortDir = "DESC",
+        ?int $loopLimit = null,
+    ): array {
+        $count = 1000;
+        $offset = 0;
+        $campaigns = [];
+        $loops = 0;
+
+        do {
+            $response = $this->getCampaigns(
+                count: $count,
+                offset: $offset,
+                status: $status,
+                sortField: $sortField,
+                sortDir: $sortDir
+            );
+            $campaigns = [...$campaigns, ...$response['campaigns']];
+            $offset += $count;
+            $loops++;
+        } while ($response['total_items'] > $offset && (is_null($loopLimit) || $loops < $loopLimit));
+
+        return [
+            'total_items' => $response['total_items'],
+            'campaigns' => $campaigns
+        ];
+    }
+
+    /**
+     * @param callable $callback
+     * @param string|null $status
+     * @param string $sortField
+     * @param string $sortDir
+     * @return void
+     * @throws GuzzleException
+     */
+    public function getAllCampaignsAndProcess(
+        callable $callback,
+        ?string $status = null,
+        string $sortField = "create_time",
+        string $sortDir = "DESC",
+    ): void {
+        $count = 1000;
+        $offset = 0;
+
+        do {
+            $response = $this->getCampaigns(
+                count: $count,
+                offset: $offset,
+                status: $status,
+                sortField: $sortField,
+                sortDir: $sortDir
+            );
+            if (!empty($response['campaigns'])) {
+                $callback($response['campaigns']);
+            }
+            $totalItems = $response['total_items'] ?? $count + $offset;
             $offset += $count;
         } while ($totalItems > $offset);
     }
