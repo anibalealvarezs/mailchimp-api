@@ -12,20 +12,20 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:anibalealvarezs/api-client-skeleton.git",
-                "reference": "219272c2f5e23d9aab9cc0892cf643f4a3eaba3b"
+                "reference": "829794e6e860305f306065dce4e3ad9476bb8901"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/api-client-skeleton/anibalealvarezs-api-client-skeleton-219272c2f5e23d9aab9cc0892cf643f4a3eaba3b-zip-ab6ff3.zip",
-                "reference": "219272c2f5e23d9aab9cc0892cf643f4a3eaba3b",
-                "shasum": "ac97791d5f6fc97131305d1690e841beaeaba5e8"
+                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/api-client-skeleton/anibalealvarezs-api-client-skeleton-829794e6e860305f306065dce4e3ad9476bb8901-zip-d88cd3.zip",
+                "reference": "829794e6e860305f306065dce4e3ad9476bb8901",
+                "shasum": "0d525a3dce7ba995c81f6333ef92c71e8660fb7a"
             },
             "require": {
                 "anibalealvarezs/oauth-v1": "@dev",
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^7.0",
                 "php": ">=8.1",
-                "predis/predis": "^2.0",
+                "predis/predis": "^2.0 || ^3.0",
                 "symfony/yaml": "^6.0 || ^7.0"
             },
             "require-dev": {
@@ -67,7 +67,7 @@
             "support": {
                 "issues": "https://github.com/anibalealvarezs/api-client-skeleton/issues"
             },
-            "time": "2026-04-17T21:45:03+00:00"
+            "time": "2026-04-17T21:50:21+00:00"
         },
         {
             "name": "anibalealvarezs/oauth-v1",
@@ -743,26 +743,27 @@
         },
         {
             "name": "predis/predis",
-            "version": "v2.x-dev",
+            "version": "v3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "be75254ab6333f00ec141762bee1cca741b0fbae"
+                "reference": "2033429520d8997a7815a2485f56abe6d2d0e075"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/be75254ab6333f00ec141762bee1cca741b0fbae",
-                "reference": "be75254ab6333f00ec141762bee1cca741b0fbae",
+                "url": "https://api.github.com/repos/predis/predis/zipball/2033429520d8997a7815a2485f56abe6d2d0e075",
+                "reference": "2033429520d8997a7815a2485f56abe6d2d0e075",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0"
+                "php": "^7.2 || ^8.0",
+                "psr/http-message": "^1.0|^2.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.3",
                 "phpstan/phpstan": "^1.9",
                 "phpunit/phpcov": "^6.0 || ^8.0",
-                "phpunit/phpunit": "^8.0 || ^9.4"
+                "phpunit/phpunit": "^8.0 || ~9.4.4"
             },
             "suggest": {
                 "ext-relay": "Faster connection with in-memory caching (>=0.6.2)"
@@ -793,7 +794,7 @@
             ],
             "support": {
                 "issues": "https://github.com/predis/predis/issues",
-                "source": "https://github.com/predis/predis/tree/v2.x"
+                "source": "https://github.com/predis/predis/tree/v3.4.2"
             },
             "funding": [
                 {
@@ -801,7 +802,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-12T18:01:35+00:00"
+            "time": "2026-03-09T20:33:04+00:00"
         },
         {
             "name": "psr/clock",
