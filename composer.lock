@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "936e3661b6b340fd4e4493dd48b711b7",
+    "content-hash": "17682a8c343fe8720ce826f04a146ec2",
     "packages": [
         {
             "name": "anibalealvarezs/api-client-skeleton",
             "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:anibalealvarezs/api-client-skeleton.git",
+                "reference": "0425a0140f5dcc13794ff30a73f25e2c139ed801"
+            },
             "dist": {
-                "type": "path",
-                "url": "../api-client-skeleton",
-                "reference": "d0c0ddb0f1f66680f896a1da7c96417a806c64eb"
+                "type": "zip",
+                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/api-client-skeleton/anibalealvarezs-api-client-skeleton-0425a0140f5dcc13794ff30a73f25e2c139ed801-zip-a889f7.zip",
+                "reference": "0425a0140f5dcc13794ff30a73f25e2c139ed801",
+                "shasum": "b8c7d428c4a92fc3e0ed84d6359834d0c9e20b2d"
             },
             "require": {
                 "anibalealvarezs/oauth-v1": "@dev",
@@ -23,10 +29,12 @@
                 "symfony/yaml": "^6.0 || ^7.0"
             },
             "require-dev": {
+                "doctrine/instantiator": "^1.5",
                 "fakerphp/faker": "^1.20",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^9"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -60,27 +68,32 @@
             "support": {
                 "issues": "https://github.com/anibalealvarezs/api-client-skeleton/issues"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-04-28T01:48:02+00:00"
         },
         {
             "name": "anibalealvarezs/oauth-v1",
             "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:anibalealvarezs/oauth-v1.git",
+                "reference": "3deb0aada91cdda04a30d66ae4c27c445be5a031"
+            },
             "dist": {
-                "type": "path",
-                "url": "../OAuth-v1",
-                "reference": "5ddf53cc7dc2265d3e3979838d974c931b2a30bf"
+                "type": "zip",
+                "url": "https://satis.anibalalvarez.com/dist/anibalealvarezs/oauth-v1/anibalealvarezs-oauth-v1-3deb0aada91cdda04a30d66ae4c27c445be5a031-zip-19691e.zip",
+                "reference": "3deb0aada91cdda04a30d66ae4c27c445be5a031",
+                "shasum": "de9ceea2aa502d1793ec7779dfb6a0681363d71a"
             },
             "require": {
                 "php": ">=8.1"
             },
             "require-dev": {
+                "doctrine/instantiator": "^1.5",
                 "fakerphp/faker": "^1.20",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^9"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -114,10 +127,7 @@
             "support": {
                 "issues": "https://github.com/anibalealvarezs/OAuth-v1/issues"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-04-28T01:33:56+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -633,12 +643,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon.git",
-                "reference": "7a342129e15e7568ff888bb2a5017b9c1c5a5805"
+                "reference": "90f6763e98c05b5fa8fefdec6ba234f2eb76b20d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/7a342129e15e7568ff888bb2a5017b9c1c5a5805",
-                "reference": "7a342129e15e7568ff888bb2a5017b9c1c5a5805",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon/zipball/90f6763e98c05b5fa8fefdec6ba234f2eb76b20d",
+                "reference": "90f6763e98c05b5fa8fefdec6ba234f2eb76b20d",
                 "shasum": ""
             },
             "require": {
@@ -731,7 +741,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-18T11:02:08+00:00"
+            "time": "2026-04-26T20:41:39+00:00"
         },
         {
             "name": "predis/predis",
@@ -1678,34 +1688,35 @@
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
-            "version": "2.2.x-dev",
+            "version": "1.5.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "c795a176780bcada3d008d07eef0c2b1b298665c"
+                "reference": "12be2483e1f0e850b353e26869e4e6c038459501"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/c795a176780bcada3d008d07eef0c2b1b298665c",
-                "reference": "c795a176780bcada3d008d07eef0c2b1b298665c",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/12be2483e1f0e850b353e26869e4e6c038459501",
+                "reference": "12be2483e1f0e850b353e26869e4e6c038459501",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.4"
+                "php": "^7.1 || ^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^14",
+                "doctrine/coding-standard": "^9 || ^12",
                 "ext-pdo": "*",
                 "ext-phar": "*",
-                "phpbench/phpbench": "^1.2",
-                "phpstan/phpstan": "^2.1",
-                "phpstan/phpstan-phpunit": "^2.0",
-                "phpunit/phpunit": "^10.5.58"
+                "phpbench/phpbench": "^0.16 || ^1",
+                "phpstan/phpstan": "^1.4",
+                "phpstan/phpstan-phpunit": "^1",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6",
+                "vimeo/psalm": "^4.30 || ^5.4"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Doctrine\\Instantiator\\": "src/"
+                    "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1727,7 +1738,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/instantiator/issues",
-                "source": "https://github.com/doctrine/instantiator/tree/2.2.x"
+                "source": "https://github.com/doctrine/instantiator/tree/1.5.x"
             },
             "funding": [
                 {
@@ -1743,7 +1754,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-20T19:06:08+00:00"
+            "time": "2023-12-09T14:16:53+00:00"
         },
         {
             "name": "fakerphp/faker",
