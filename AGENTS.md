@@ -1,6 +1,6 @@
-1. Lee el archivo D:\laragon\www\_shared\AGENTS.md y extrae de ahí el contexto global del proyecto de este workspace.
-2. Utiliza el archivo D:\laragon\www\_shared\MEMORY.md como memoria permanente para ti. Siéntete libre
-de ampliarlo a discreción con toda información relevante que consideres indispensable para ampliar tu conocimiento sobre
-el proyecto de forma permanente. Básate especialmente en mi feedback y mis correcciones durante nuestras conversaciones.
-Siempre que sientas que has aprendido algo nuevo sobre el proyecto, deja constancia en ese MEMORY.md, para que te sirva
-de contexto para futuras sesiones.
+# Mailchimp API
+## SaaS Role: Communication (SDKs)
+- **Parent Context:** Refer to `D:\laragon\www\_shared\AGENTS.md` for global protocols.
+- **Local Memory:** Refer to `MEMORY.md` in this package for repository-specific history, decisions, and follow-up notes; consult it before making local changes.
+- **Position:** This package operates within the Communication (SDKs) layer of the APIs Hub SaaS hierarchy, providing Mailchimp API client functionality.
+- **Dependencies:** Consumes `anibalealvarezs/api-client-skeleton` and serves downstream Mailchimp integrations and future drivers.
