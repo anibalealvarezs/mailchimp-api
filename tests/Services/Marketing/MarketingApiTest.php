@@ -11,6 +11,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Anibalealvarezs\MailchimpApi\Services\Marketing\MarketingApi;
+use Anibalealvarezs\MailchimpApi\Support\MailchimpErrorClassifier;
 use Symfony\Component\Yaml\Yaml;
 use Anibalealvarezs\ApiSkeleton\Classes\Exceptions\ApiRequestException;
 
@@ -189,5 +190,42 @@ class MarketingApiTest extends TestCase
         $this->expectException(ApiRequestException::class);
 
         $client->getAllCampaignsAndProcess(function ($data) {});
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function testMailchimpSemanticRetryableFalsy200EventuallySucceeds(): void
+    {
+        $retryableBody = [
+            'type' => 'rate_limit',
+            'title' => 'Too Many Requests',
+            'status' => 429,
+            'detail' => 'You have exceeded your API call limit.',
+        ];
+        $successBody = ['health_status' => 'Everything\'s Chimpy!'];
+
+        $mock = new MockHandler([
+            new Response(200, [], json_encode($retryableBody)),
+            new Response(200, [], json_encode($successBody)),
+        ]);
+        $guzzle = $this->createMockedGuzzleClient($mock);
+        $client = new MarketingApi(apiKey: 'key', serverPrefix: 'us1', guzzleClient: $guzzle);
+
+        $response = $client->performRequest(method: 'GET', endpoint: 'ping');
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertTrue(is_callable($client->getRateLimitDetector()));
+    }
+
+    public function testMailchimpErrorClassifierRecognizesThrottlingSignals(): void
+    {
+        $classification = MailchimpErrorClassifier::classify([
+            'status' => 429,
+            'type' => 'throttled',
+            'detail' => 'Too many requests',
+        ]);
+
+        $this->assertSame('retryable', $classification['category']);
+        $this->assertTrue($classification['should_retry']);
     }
 }

@@ -5,6 +5,7 @@ namespace Anibalealvarezs\MailchimpApi\Services\Marketing;
 use Carbon\Carbon;
 use Anibalealvarezs\ApiSkeleton\Clients\BasicClient;
 use Anibalealvarezs\ApiSkeleton\Enums\EncodingMethod;
+use Anibalealvarezs\MailchimpApi\Support\MailchimpErrorClassifier;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -32,6 +33,7 @@ class MarketingApi extends BasicClient
 
         $this->setResponseErrorDetector('detail');
         $this->setErrorMessageParser(fn ($data) => $data['detail'] ?? ($data['title'] ?? json_encode($data)));
+        $this->setRateLimitDetector([MailchimpErrorClassifier::class, 'isRetryable']);
     }
 
     /**
