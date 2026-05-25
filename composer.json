@@ -1,50 +1,50 @@
 {
-    "name":  "anibalealvarezs/mailchimp-api",
-    "description":  "description",
-    "license":  "MIT",
-    "authors":  [
-                    {
-                        "name":  "AnÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­bal ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âlvarez",
-                        "email":  "anibalealvarezs@gmail.com"
-                    }
-                ],
-    "require":  {
-                    "guzzlehttp/guzzle":  "^7.0",
-                    "ext-json":  "*",
-                    "symfony/yaml":  "^6.0 || ^7.0",
-                    "nesbot/carbon":  "^2.61 || ^3.0",
-                    "anibalealvarezs/api-client-skeleton":  "^1.0.0",
-                    "monolog/monolog":  "^2.0 || ^3.0",
-                    "psr/log":  "^1.0 || ^2.0 || ^3.0",
-                    "php":  ">=8.3"
-                },
-    "repositories":  [
-                         {
-                             "type":  "composer",
-                             "url":  "https://satis.anibalalvarez.com/"
-                         }
-                     ],
-    "autoload":  {
-                     "psr-4":  {
-                                   "Anibalealvarezs\\MailchimpApi\\":  "src"
-                               }
-                 },
-    "autoload-dev":  {
-                         "psr-4":  {
-                                       "Tests\\":  "tests/"
-                                   }
-                     },
-    "require-dev":  {
-                        "fakerphp/faker":  "^1.20",
-                        "doctrine/instantiator":  "^1.5",
-                        "phpunit/phpunit":  "^9",
-                        "phpstan/phpstan":  "^1.10"
-                    },
-    "minimum-stability":  "dev",
-    "config":  {
-                   "platform":  {
-                                    "php":  "8.3.0"
-                                }
-               },
-    "prefer-stable":  true
+  "name": "anibalealvarezs/mailchimp-api",
+  "description": "description",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aníbal Álvarez",
+      "email": "anibalealvarezs@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^7.0",
+    "ext-json": "*",
+    "symfony/yaml": "^6.0 || ^7.0",
+    "nesbot/carbon": "^2.61 || ^3.0",
+    "anibalealvarezs/api-client-skeleton": "^1.0.0",
+    "monolog/monolog": "^2.0 || ^3.0",
+    "psr/log": "^1.0 || ^2.0 || ^3.0",
+    "php": ">=8.3"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://satis.anibalalvarez.com/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Anibalealvarezs\\MailchimpApi\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "fakerphp/faker": "^1.20",
+    "doctrine/instantiator": "^1.5",
+    "phpunit/phpunit": "^9",
+    "phpstan/phpstan": "^1.10"
+  },
+  "minimum-stability": "dev",
+  "config": {
+    "platform": {
+      "php": "8.3.0"
+    }
+  },
+  "prefer-stable": true
 }
