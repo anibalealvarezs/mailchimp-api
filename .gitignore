@@ -8,3 +8,5 @@
 **/.php-cs-fixer.dist.php
 
 .copilot/composer-path-repositories.backup.json
+
+hs_err_pid47352.log
