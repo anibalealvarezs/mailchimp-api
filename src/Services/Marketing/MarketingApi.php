@@ -393,6 +393,7 @@ class MarketingApi extends BasicClient
         ?string $status = null,
         string $sortField = "create_time",
         string $sortDir = "DESC",
+        ?string $type = null,
     ): array {
         $query = [
             "count" => $count,
@@ -402,6 +403,9 @@ class MarketingApi extends BasicClient
         ];
         if ($status) {
             $query['status'] = $status;
+        }
+        if ($type) {
+            $query['type'] = $type;
         }
         $response = $this->performRequest(
             method: "GET",
@@ -417,6 +421,7 @@ class MarketingApi extends BasicClient
      * @param string $sortField
      * @param string $sortDir
      * @param int $batchSize
+     * @param string|null $type
      * @return void
      * @throws GuzzleException
      */
@@ -426,6 +431,7 @@ class MarketingApi extends BasicClient
         string $sortField = "create_time",
         string $sortDir = "DESC",
         int $batchSize = 1000,
+        ?string $type = null,
     ): void {
         $offset = 0;
 
@@ -435,7 +441,8 @@ class MarketingApi extends BasicClient
                 offset: $offset,
                 status: $status,
                 sortField: $sortField,
-                sortDir: $sortDir
+                sortDir: $sortDir,
+                type: $type,
             );
             if (!empty($response['campaigns'])) {
                 $callback($response['campaigns']);
@@ -450,6 +457,7 @@ class MarketingApi extends BasicClient
      * @param string $sortField
      * @param string $sortDir
      * @param int|null $loopLimit
+     * @param string|null $type
      * @return array
      * @throws GuzzleException
      */
@@ -458,6 +466,7 @@ class MarketingApi extends BasicClient
         string $sortField = "create_time",
         string $sortDir = "DESC",
         ?int $loopLimit = null,
+        ?string $type = null,
     ): array {
         $campaigns = [];
         $loops = 0;
@@ -472,7 +481,8 @@ class MarketingApi extends BasicClient
             status: $status,
             sortField: $sortField,
             sortDir: $sortDir,
-            batchSize: 1000
+            batchSize: 1000,
+            type: $type,
         );
 
         return [
@@ -1415,5 +1425,112 @@ class MarketingApi extends BasicClient
             'total_items' => count($templates),
             'templates' => $templates
         ];
+    }
+
+    // =========================================================================
+    // AUTOMATIONS (CUSTOMER JOURNEYS & CLASSIC AUTOMATIONS)
+    // =========================================================================
+
+    /**
+     * GET /automations
+     *
+     * @param int $count
+     * @param int $offset
+     * @param string|null $status
+     * @return array
+     * @throws GuzzleException
+     */
+    public function getAutomations(
+        int $count = 1000,
+        int $offset = 0,
+        ?string $status = null,
+    ): array {
+        $query = [
+            "count" => $count,
+            "offset" => $offset,
+        ];
+        if ($status) {
+            $query['status'] = $status;
+        }
+        $response = $this->performRequest(
+            method: "GET",
+            endpoint: "automations",
+            query: $query,
+        );
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
+    /**
+     * @param callable $callback
+     * @param string|null $status
+     * @param int $batchSize
+     * @return void
+     * @throws GuzzleException
+     */
+    public function getAllAutomationsAndProcess(
+        callable $callback,
+        ?string $status = null,
+        int $batchSize = 1000,
+    ): void {
+        $offset = 0;
+
+        do {
+            $response = $this->getAutomations(
+                count: $batchSize,
+                offset: $offset,
+                status: $status,
+            );
+            if (!empty($response['automations'])) {
+                $callback($response['automations']);
+            }
+            $totalItems = $response['total_items'] ?? $batchSize + $offset;
+            $offset += $batchSize;
+        } while ($totalItems > $offset);
+    }
+
+    /**
+     * @param string|null $status
+     * @param int|null $loopLimit
+     * @return array
+     * @throws GuzzleException
+     */
+    public function getAllAutomations(
+        ?string $status = null,
+        ?int $loopLimit = null,
+    ): array {
+        $automations = [];
+        $loops = 0;
+
+        $this->getAllAutomationsAndProcess(
+            callback: function ($batch) use (&$automations, &$loops, $loopLimit) {
+                if (is_null($loopLimit) || $loops < $loopLimit) {
+                    $automations = [...$automations, ...$batch];
+                    $loops++;
+                }
+            },
+            status: $status,
+            batchSize: 1000,
+        );
+
+        return [
+            'total_items' => count($automations),
+            'automations' => $automations,
+        ];
+    }
+
+    /**
+     * GET /automations/{workflow_id}/emails
+     *
+     * @param string $workflowId
+     * @return array
+     * @throws GuzzleException
+     */
+    public function getAutomationEmails(string $workflowId): array
+    {
+        $response = $this->performRequest(
+            method: "GET",
+            endpoint: "automations/" . $workflowId . "/emails",
+        );
+        return json_decode($response->getBody()->getContents(), true);
     }
 }
