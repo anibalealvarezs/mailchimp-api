@@ -69,6 +69,21 @@ class MarketingApi extends BasicClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
+    /**
+     * Get details about the authenticated Mailchimp account (GET /3.0/).
+     *
+     * @return array
+     * @throws GuzzleException
+     */
+    public function getRoot(): array
+    {
+        $response = $this->performRequest(
+            method: "GET",
+            endpoint: "",
+        );
+        return json_decode($response->getBody()->getContents(), true);
+    }
+
     // =========================================================================
     // LISTS / AUDIENCES
     // =========================================================================
