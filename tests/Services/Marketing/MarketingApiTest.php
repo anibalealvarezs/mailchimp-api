@@ -17,6 +17,39 @@ use Anibalealvarezs\ApiSkeleton\Classes\Exceptions\ApiRequestException;
 
 class MarketingApiTest extends TestCase
 {
+    public function testEcommercePagingStopsAtLoopLimitAndEncodesSourceIds(): void
+    {
+        $history = [];
+        $mock = new MockHandler([
+            new Response(200, [], json_encode(['products' => [['id' => 'one']], 'total_items' => 3000])),
+        ]);
+        $stack = HandlerStack::create($mock);
+        $stack->push(\GuzzleHttp\Middleware::history($history));
+        $client = new MarketingApi(apiKey: 'test', serverPrefix: 'us1', guzzleClient: new GuzzleClient(['handler' => $stack]));
+        $result = $client->getAllEcommerceProducts('store/with space', loopLimit: 1);
+        $this->assertSame([['id' => 'one']], $result['products']);
+        $this->assertCount(1, $history);
+        $this->assertStringContainsString('store%2Fwith%20space/products', (string)$history[0]['request']->getUri());
+    }
+
+    public function testEcommercePagingRejectsRepeatedPages(): void
+    {
+        $page = json_encode(['carts' => [['id' => 'one']], 'total_items' => 100]);
+        $client = new MarketingApi(apiKey: 'test', serverPrefix: 'us1',
+            guzzleClient: $this->createMockedGuzzleClient(new MockHandler([
+                new Response(200, [], $page), new Response(200, [], $page),
+            ])));
+        $this->expectException(\RuntimeException::class);
+        $client->getAllEcommerceCartsAndProcess('store', static fn ($batch) => null, batchSize: 1);
+    }
+
+    public function testEcommercePagingCancelsBeforeFetching(): void
+    {
+        $client = new MarketingApi(apiKey: 'test', serverPrefix: 'us1',
+            guzzleClient: $this->createMockedGuzzleClient(new MockHandler([])));
+        $this->expectException(\RuntimeException::class);
+        $client->getAllEcommerceCustomersAndProcess('store', static fn ($batch) => null, shouldContinue: static fn () => false);
+    }
     private MarketingApi $marketingApi;
 
     protected function createMockedGuzzleClient(MockHandler $mock): GuzzleClient
