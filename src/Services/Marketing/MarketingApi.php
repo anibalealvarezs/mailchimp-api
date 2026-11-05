@@ -1045,250 +1045,243 @@ class MarketingApi extends BasicClient
      */
     public function getEcommerceStores(int $count = 100, int $offset = 0): array
     {
-        $response = $this->performRequest(
-            method: 'GET',
-            endpoint: 'ecommerce/stores',
-            query: ['count' => $count, 'offset' => $offset],
+        $query = ['count' => $count, 'offset' => $offset];
+        $response = $this->performRequest(method: 'GET', endpoint: 'ecommerce/stores', query: $query);
+        return json_decode($response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+    }
+
+    public function getAllEcommerceStoresAndProcess(callable $callback, int $batchSize = 100, ?callable $shouldContinue = null, ?int $loopLimit = null): void
+    {
+        $this->streamEcommerceCollection(
+            fn (int $offset) => $this->getEcommerceStores($batchSize, $offset),
+            'stores', $callback, $batchSize, $shouldContinue, $loopLimit
         );
-        return json_decode($response->getBody()->getContents(), true);
     }
 
-    /**
-     * @param callable $callback
-     * @param int $batchSize
-     * @return void
-     * @throws GuzzleException
-     */
-    public function getAllEcommerceStoresAndProcess(
-        callable $callback,
-        int $batchSize = 100
-    ): void {
-        $offset = 0;
-
-        do {
-            $response = $this->getEcommerceStores(
-                count: $batchSize,
-                offset: $offset
-            );
-            if (!empty($response['stores'])) {
-                $callback($response['stores']);
-            }
-            $totalItems = $response['total_items'] ?? $batchSize + $offset;
-            $offset += $batchSize;
-        } while ($totalItems > $offset);
-    }
-
-    /**
-     * @param int|null $loopLimit
-     * @return array
-     * @throws GuzzleException
-     */
     public function getAllEcommerceStores(?int $loopLimit = null): array
     {
-        $stores = [];
-        $loops = 0;
-
+        $items = [];
         $this->getAllEcommerceStoresAndProcess(
-            callback: function ($batch) use (&$stores, &$loops, $loopLimit) {
-                if (is_null($loopLimit) || $loops < $loopLimit) {
-                    $stores = [...$stores, ...$batch];
-                    $loops++;
-                }
-            },
-            batchSize: 100
+            callback: static function (array $batch) use (&$items): void {
+                array_push($items, ...$batch);
+            }, loopLimit: $loopLimit
         );
-
-        return [
-            'total_items' => count($stores),
-            'stores' => $stores
-        ];
+        return ['total_items' => count($items), 'stores' => $items];
     }
 
-    /**
-     * GET /ecommerce/stores/{store_id}/orders
-     *
-     * @param string $storeId
-     * @param int $count
-     * @param int $offset
-     * @param string|null $customerEmail
-     * @param string|null $campaignId
-     * @return array
-     * @throws GuzzleException
-     */
-    public function getEcommerceOrders(
-        string $storeId,
-        int $count = 1000,
-        int $offset = 0,
-        ?string $customerEmail = null,
-        ?string $campaignId = null
-    ): array {
-        $query = [
-            'count' => $count,
-            'offset' => $offset,
-        ];
-        if ($customerEmail) {
-            $query['customer_email'] = $customerEmail;
-        }
-        if ($campaignId) {
-            $query['campaign_id'] = $campaignId;
-        }
+    public function getEcommerceOrders(string $storeId, int $count = 1000, int $offset = 0, ?string $customerEmail = null, ?string $campaignId = null): array
+    {
+        $query = ['count' => $count, 'offset' => $offset];
+        if ($customerEmail !== null) $query['customer_email'] = $customerEmail;
+        if ($campaignId !== null) $query['campaign_id'] = $campaignId;
+        $response = $this->performRequest(method: 'GET', endpoint: 'ecommerce/stores'. '/' . rawurlencode($storeId). '/orders', query: $query);
+        return json_decode($response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+    }
 
-        $response = $this->performRequest(
-            method: 'GET',
-            endpoint: 'ecommerce/stores/' . $storeId . '/orders',
-            query: $query,
+    public function getAllEcommerceOrdersAndProcess(string $storeId, callable $callback, int $batchSize = 1000, ?string $customerEmail = null, ?string $campaignId = null, ?callable $shouldContinue = null, ?int $loopLimit = null): void
+    {
+        $this->streamEcommerceCollection(
+            fn (int $offset) => $this->getEcommerceOrders($storeId, $batchSize, $offset, $customerEmail, $campaignId),
+            'orders', $callback, $batchSize, $shouldContinue, $loopLimit
         );
-        return json_decode($response->getBody()->getContents(), true);
     }
 
-    /**
-     * @param string $storeId
-     * @param callable $callback
-     * @param int $batchSize
-     * @param string|null $customerEmail
-     * @param string|null $campaignId
-     * @return void
-     * @throws GuzzleException
-     */
-    public function getAllEcommerceOrdersAndProcess(
-        string $storeId,
-        callable $callback,
-        int $batchSize = 1000,
-        ?string $customerEmail = null,
-        ?string $campaignId = null
-    ): void {
-        $offset = 0;
-
-        do {
-            $response = $this->getEcommerceOrders(
-                storeId: $storeId,
-                count: $batchSize,
-                offset: $offset,
-                customerEmail: $customerEmail,
-                campaignId: $campaignId
-            );
-            if (!empty($response['orders'])) {
-                $callback($response['orders']);
-            }
-            $totalItems = $response['total_items'] ?? $batchSize + $offset;
-            $offset += $batchSize;
-        } while ($totalItems > $offset);
-    }
-
-    /**
-     * @param string $storeId
-     * @param string|null $customerEmail
-     * @param string|null $campaignId
-     * @param int|null $loopLimit
-     * @return array
-     * @throws GuzzleException
-     */
-    public function getAllEcommerceOrders(
-        string $storeId,
-        ?string $customerEmail = null,
-        ?string $campaignId = null,
-        ?int $loopLimit = null
-    ): array {
-        $orders = [];
-        $loops = 0;
-
+    public function getAllEcommerceOrders(string $storeId, ?string $customerEmail = null, ?string $campaignId = null, ?int $loopLimit = null): array
+    {
+        $items = [];
         $this->getAllEcommerceOrdersAndProcess(
-            storeId: $storeId,
-            callback: function ($batch) use (&$orders, &$loops, $loopLimit) {
-                if (is_null($loopLimit) || $loops < $loopLimit) {
-                    $orders = [...$orders, ...$batch];
-                    $loops++;
-                }
-            },
-            batchSize: 1000,
-            customerEmail: $customerEmail,
-            campaignId: $campaignId
+            storeId: $storeId, callback: static function (array $batch) use (&$items): void {
+                array_push($items, ...$batch);
+            }, customerEmail: $customerEmail, campaignId: $campaignId, loopLimit: $loopLimit
         );
-
-        return [
-            'total_items' => count($orders),
-            'orders' => $orders
-        ];
+        return ['total_items' => count($items), 'orders' => $items];
     }
 
-    /**
-     * GET /ecommerce/stores/{store_id}/customers
-     *
-     * @param string $storeId
-     * @param int $count
-     * @param int $offset
-     * @return array
-     * @throws GuzzleException
-     */
-    public function getEcommerceCustomers(
-        string $storeId,
-        int $count = 1000,
-        int $offset = 0
-    ): array {
-        $response = $this->performRequest(
-            method: 'GET',
-            endpoint: 'ecommerce/stores/' . $storeId . '/customers',
-            query: ['count' => $count, 'offset' => $offset],
+    public function getEcommerceCustomers(string $storeId, int $count = 1000, int $offset = 0): array
+    {
+        $query = ['count' => $count, 'offset' => $offset];
+        $response = $this->performRequest(method: 'GET', endpoint: 'ecommerce/stores'. '/' . rawurlencode($storeId). '/customers', query: $query);
+        return json_decode($response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+    }
+
+    public function getAllEcommerceCustomersAndProcess(string $storeId, callable $callback, int $batchSize = 1000, ?callable $shouldContinue = null, ?int $loopLimit = null): void
+    {
+        $this->streamEcommerceCollection(
+            fn (int $offset) => $this->getEcommerceCustomers($storeId, $batchSize, $offset),
+            'customers', $callback, $batchSize, $shouldContinue, $loopLimit
         );
-        return json_decode($response->getBody()->getContents(), true);
     }
 
-    /**
-     * @param string $storeId
-     * @param callable $callback
-     * @param int $batchSize
-     * @return void
-     * @throws GuzzleException
-     */
-    public function getAllEcommerceCustomersAndProcess(
-        string $storeId,
-        callable $callback,
-        int $batchSize = 1000
-    ): void {
-        $offset = 0;
-
-        do {
-            $response = $this->getEcommerceCustomers(
-                storeId: $storeId,
-                count: $batchSize,
-                offset: $offset
-            );
-            if (!empty($response['customers'])) {
-                $callback($response['customers']);
-            }
-            $totalItems = $response['total_items'] ?? $batchSize + $offset;
-            $offset += $batchSize;
-        } while ($totalItems > $offset);
-    }
-
-    /**
-     * @param string $storeId
-     * @param int|null $loopLimit
-     * @return array
-     * @throws GuzzleException
-     */
-    public function getAllEcommerceCustomers(
-        string $storeId,
-        ?int $loopLimit = null
-    ): array {
-        $customers = [];
-        $loops = 0;
-
+    public function getAllEcommerceCustomers(string $storeId, ?int $loopLimit = null): array
+    {
+        $items = [];
         $this->getAllEcommerceCustomersAndProcess(
-            storeId: $storeId,
-            callback: function ($batch) use (&$customers, &$loops, $loopLimit) {
-                if (is_null($loopLimit) || $loops < $loopLimit) {
-                    $customers = [...$customers, ...$batch];
-                    $loops++;
-                }
-            },
-            batchSize: 1000
+            storeId: $storeId, callback: static function (array $batch) use (&$items): void {
+                array_push($items, ...$batch);
+            }, loopLimit: $loopLimit
         );
+        return ['total_items' => count($items), 'customers' => $items];
+    }
 
-        return [
-            'total_items' => count($customers),
-            'customers' => $customers
-        ];
+    public function getEcommerceProducts(string $storeId, int $count = 1000, int $offset = 0): array
+    {
+        $query = ['count' => $count, 'offset' => $offset];
+        $response = $this->performRequest(method: 'GET', endpoint: 'ecommerce/stores'. '/' . rawurlencode($storeId). '/products', query: $query);
+        return json_decode($response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+    }
+
+    public function getAllEcommerceProductsAndProcess(string $storeId, callable $callback, int $batchSize = 1000, ?callable $shouldContinue = null, ?int $loopLimit = null): void
+    {
+        $this->streamEcommerceCollection(
+            fn (int $offset) => $this->getEcommerceProducts($storeId, $batchSize, $offset),
+            'products', $callback, $batchSize, $shouldContinue, $loopLimit
+        );
+    }
+
+    public function getAllEcommerceProducts(string $storeId, ?int $loopLimit = null): array
+    {
+        $items = [];
+        $this->getAllEcommerceProductsAndProcess(
+            storeId: $storeId, callback: static function (array $batch) use (&$items): void {
+                array_push($items, ...$batch);
+            }, loopLimit: $loopLimit
+        );
+        return ['total_items' => count($items), 'products' => $items];
+    }
+
+    public function getEcommerceCarts(string $storeId, int $count = 1000, int $offset = 0): array
+    {
+        $query = ['count' => $count, 'offset' => $offset];
+        $response = $this->performRequest(method: 'GET', endpoint: 'ecommerce/stores'. '/' . rawurlencode($storeId). '/carts', query: $query);
+        return json_decode($response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+    }
+
+    public function getAllEcommerceCartsAndProcess(string $storeId, callable $callback, int $batchSize = 1000, ?callable $shouldContinue = null, ?int $loopLimit = null): void
+    {
+        $this->streamEcommerceCollection(
+            fn (int $offset) => $this->getEcommerceCarts($storeId, $batchSize, $offset),
+            'carts', $callback, $batchSize, $shouldContinue, $loopLimit
+        );
+    }
+
+    public function getAllEcommerceCarts(string $storeId, ?int $loopLimit = null): array
+    {
+        $items = [];
+        $this->getAllEcommerceCartsAndProcess(
+            storeId: $storeId, callback: static function (array $batch) use (&$items): void {
+                array_push($items, ...$batch);
+            }, loopLimit: $loopLimit
+        );
+        return ['total_items' => count($items), 'carts' => $items];
+    }
+
+    public function getEcommercePromoRules(string $storeId, int $count = 1000, int $offset = 0): array
+    {
+        $query = ['count' => $count, 'offset' => $offset];
+        $response = $this->performRequest(method: 'GET', endpoint: 'ecommerce/stores'. '/' . rawurlencode($storeId). '/promo-rules', query: $query);
+        return json_decode($response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+    }
+
+    public function getAllEcommercePromoRulesAndProcess(string $storeId, callable $callback, int $batchSize = 1000, ?callable $shouldContinue = null, ?int $loopLimit = null): void
+    {
+        $this->streamEcommerceCollection(
+            fn (int $offset) => $this->getEcommercePromoRules($storeId, $batchSize, $offset),
+            'promo_rules', $callback, $batchSize, $shouldContinue, $loopLimit
+        );
+    }
+
+    public function getAllEcommercePromoRules(string $storeId, ?int $loopLimit = null): array
+    {
+        $items = [];
+        $this->getAllEcommercePromoRulesAndProcess(
+            storeId: $storeId, callback: static function (array $batch) use (&$items): void {
+                array_push($items, ...$batch);
+            }, loopLimit: $loopLimit
+        );
+        return ['total_items' => count($items), 'promo_rules' => $items];
+    }
+
+    public function getEcommerceProductVariants(string $storeId, string $productId, int $count = 1000, int $offset = 0): array
+    {
+        $query = ['count' => $count, 'offset' => $offset];
+        $response = $this->performRequest(method: 'GET', endpoint: 'ecommerce/stores'. '/' . rawurlencode($storeId). '/products/' . rawurlencode($productId) . '/variants', query: $query);
+        return json_decode($response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+    }
+
+    public function getAllEcommerceProductVariantsAndProcess(string $storeId, string $productId, callable $callback, int $batchSize = 1000, ?callable $shouldContinue = null, ?int $loopLimit = null): void
+    {
+        $this->streamEcommerceCollection(
+            fn (int $offset) => $this->getEcommerceProductVariants($storeId, $productId, $batchSize, $offset),
+            'variants', $callback, $batchSize, $shouldContinue, $loopLimit
+        );
+    }
+
+    public function getAllEcommerceProductVariants(string $storeId, string $productId, ?int $loopLimit = null): array
+    {
+        $items = [];
+        $this->getAllEcommerceProductVariantsAndProcess(
+            storeId: $storeId, productId: $productId, callback: static function (array $batch) use (&$items): void {
+                array_push($items, ...$batch);
+            }, loopLimit: $loopLimit
+        );
+        return ['total_items' => count($items), 'variants' => $items];
+    }
+
+    public function getEcommercePromoCodes(string $storeId, string $promoRuleId, int $count = 1000, int $offset = 0): array
+    {
+        $query = ['count' => $count, 'offset' => $offset];
+        $response = $this->performRequest(method: 'GET', endpoint: 'ecommerce/stores'. '/' . rawurlencode($storeId). '/promo-rules/' . rawurlencode($promoRuleId) . '/promo-codes', query: $query);
+        return json_decode($response->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+    }
+
+    public function getAllEcommercePromoCodesAndProcess(string $storeId, string $promoRuleId, callable $callback, int $batchSize = 1000, ?callable $shouldContinue = null, ?int $loopLimit = null): void
+    {
+        $this->streamEcommerceCollection(
+            fn (int $offset) => $this->getEcommercePromoCodes($storeId, $promoRuleId, $batchSize, $offset),
+            'promo_codes', $callback, $batchSize, $shouldContinue, $loopLimit
+        );
+    }
+
+    public function getAllEcommercePromoCodes(string $storeId, string $promoRuleId, ?int $loopLimit = null): array
+    {
+        $items = [];
+        $this->getAllEcommercePromoCodesAndProcess(
+            storeId: $storeId, promoRuleId: $promoRuleId, callback: static function (array $batch) use (&$items): void {
+                array_push($items, ...$batch);
+            }, loopLimit: $loopLimit
+        );
+        return ['total_items' => count($items), 'promo_codes' => $items];
+    }
+
+    /** Stream bounded pages and fail on repeated source pages rather than looping forever. */
+    private function streamEcommerceCollection(callable $fetch, string $key, callable $callback, int $batchSize, ?callable $shouldContinue, ?int $loopLimit): void
+    {
+        if ($batchSize < 1 || $batchSize > 1000 || ($loopLimit !== null && $loopLimit < 0)) {
+            throw new \InvalidArgumentException('Invalid ecommerce pagination bounds.');
+        }
+        $offset = 0;
+        $loops = 0;
+        $seen = [];
+        while ($loopLimit === null || $loops < $loopLimit) {
+            if ($shouldContinue && !$shouldContinue()) {
+                throw new \RuntimeException('Ecommerce synchronization cancelled.');
+            }
+            $response = $fetch($offset);
+            if (!isset($response[$key]) || !is_array($response[$key])) {
+                throw new \UnexpectedValueException('Malformed ecommerce collection response.');
+            }
+            $batch = $response[$key];
+            if ($batch === []) return;
+            $fingerprint = hash('sha256', json_encode(array_column($batch, 'id'), JSON_THROW_ON_ERROR));
+            if (isset($seen[$fingerprint])) {
+                throw new \RuntimeException('Ecommerce pagination repeated a source page.');
+            }
+            $seen[$fingerprint] = true;
+            if ($callback($batch) === false) return;
+            $offset += $batchSize;
+            $loops++;
+            if (isset($response['total_items']) ? $offset >= (int)$response['total_items'] : count($batch) < $batchSize) return;
+        }
     }
 
     // =========================================================================
